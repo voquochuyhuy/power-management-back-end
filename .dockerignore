@@ -1,0 +1,30 @@
+# Private folders
+_docs
+_utils
+
+# Generate folders
+node_modules
+npm-debug.log
+
+# Docker
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Not relative
+arduino
+build
+compose
+
+# Utils
+.vscode
+.tmp
+.git
+.gitignore
+*/bin
+*/obj
+README.md
+LICENSE
+
+# Secret or environment var
+.env

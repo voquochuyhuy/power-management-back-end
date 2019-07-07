@@ -1,0 +1,6 @@
+{
+  "migrations-dir": "migrations/scripts",
+  "check-order": true,
+  "single-transaction": true,
+  "createSchema": true
+}

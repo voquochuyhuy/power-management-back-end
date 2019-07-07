@@ -1,0 +1,4 @@
+[submodule "arduino"]
+	path = arduino
+	url = git@bitbucket.org:firstinteractive/power-control-arduino.git
+  branch = master

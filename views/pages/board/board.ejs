@@ -1,0 +1,53 @@
+<div id="board" v-cloak>
+
+  <!-- Nav pills -->
+  <div class="clearfix">
+    <ul class="nav nav-pills float-left">
+      <li class="nav-item">
+        <a class="nav-link active" data-toggle="pill" href="#home">Tổng quan</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="pill" href="#menu1">GPIO</a>
+      </li>
+    </ul>
+    <p class="float-right navbar-text border pl-1 pr-1 rounded" id="name"><%=boardId%></p>
+    <p class="float-right navbar-text btn-sm btn-danger mr-2 power-pin"> Power OFF pin </p>
+    <p class="float-right navbar-text btn-sm btn-success mr-1 power-pin"> Power ON pin </p>
+  </div>
+  <hr>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div class="tab-pane container active" id="home">
+
+      <table class="table">
+        <tbody>
+          <tr>
+            <th scope="row">Tên Board</th>
+            <td id="boardName"></td>
+          </tr>
+          <tr>
+            <th scope="row">Mô tả</th>
+            <td id="boardDescription"></td>
+          </tr>
+          <tr>
+            <th scope="row">Địa chỉ MAC</th>
+            <td id="macAddress"></td>
+          </tr>
+          <tr>
+            <th scope="row">Max Pins</th>
+            <td id="maxPins"></td>
+          </tr>
+          <tr>
+            <th scope="row">Request Interval</th>
+            <td id="requestInterval"></td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+    <div class="tab-pane container fade" id="menu1">
+    </div>
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

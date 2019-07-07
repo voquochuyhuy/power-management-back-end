@@ -1,0 +1,33 @@
+<div id="new-board" v-cloak>
+  <h3>Thêm thiết bị mới</h3>
+  <form id="newBoardForm" method="POST" action="/api/v1/board">
+    <div class="form-group">
+      <label for="name">Tên thiết bị</label>
+      <input type="text" class="form-control" name="name" placeholder="Adruino 1234">
+    </div>
+    <div class="form-group">
+      <label for="description">Ghi chú thêm</label>
+      <textarea class="form-control" name="description" rows="3"
+        placeholder="Đây là cái Adruino cùi bắp nhất trong tất cả những cái cùi bắp"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="macAddress">Địa chỉ MAC</label>
+      <input type="text" class="form-control" name="macAddress" placeholder="00-15-5D-B7-01-00">
+    </div>
+    <div class="form-group">
+      <label for="maxPins">Số pin lớn nhất Adruino có thể điều khiển</label>
+      <input type="text" class="form-control" name="maxPins" aria-describedby="maxPinsHelp" placeholder="1">
+      <small id="maxPinsHelp" class="form-text text-muted">Mặc định bằng 1.</small>
+    </div>
+    <div class="form-group">
+      <label for="requestInterval">Khoảng thời gian gửi lại message đến máy chủ (tính bằng giây)</label>
+      <input type="text" class="form-control" name="requestInterval" aria-describedby="requestIntervalHelp"
+        placeholder="300">
+      <small id="requestIntervalHelp" class="form-text text-muted">Mặc định thời gian lặp lại hành động gửi là 300
+        giây.</small>
+    </div>
+    <button type="submit" class="btn btn-primary float-left">Xác nhận</button>
+    <div class="float-left ml-3" id="myResultsDiv"></div>
+  </form>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>

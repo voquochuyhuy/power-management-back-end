@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Power Management</title>
+
+  <% /* Viewport tag for sensible mobile support */ %>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <% /*
+        Stylesheets
+        ========================
+
+        style="overflow-x:auto, height:80vh,"
+
+        Stylesheets can be hard-coded as «link» tags, automatically injected
+        by the asset pipeline between "STYLES" and "STYLES END", or both.
+        (https://sailsjs.com/docs/concepts/assets/task-automation)
+    */ %>
+
+  <style>
+    #arduino-begin {
+      overflow-x: auto;
+      height: 50vh;
+    }
+  </style>
+
+  <% /* Auto-injected «link» tags: */ %>
+  <!--STYLES-->
+  <link rel="stylesheet" href="/dependencies/bootstrap-4/bootstrap-4.css">
+  <link rel="stylesheet" href="/dependencies/font-awesome-4/css/font-awesome.css">
+  <link rel="stylesheet" href="/styles/importer.css">
+  <!--STYLES END-->
+</head>
+
+<body>
+  <div id="page-wrap">
+    <header id="page-header"
+      class="navbar navbar-expand-sm navbar-light bg-light flex-column flex-md-row justify-content-between">
+      <a class="navbar-brand mr-0" href="/">Power Management</a>
+      <div class="navbar-nav flex-row">
+        <!-- LOGGED-IN NAVIGATION -->
+        <% if(me) { %>
+        <a class="nav-item nav-link ml-2 ml-md-0 mr-2 mr-md-0" href="/contact">Trợ giúp</a>
+        <!-- Only in desktop nav -->
+        <div class="nav-item dropdown d-none d-sm-block">
+          <a class="nav-link dropdown-toggle" id="header-account-menu-link" data-toggle="dropdown" aria-haspopup="true"
+            xz aria-expanded="false">Tài khoản</a>
+          <div class="dropdown-menu account-menu" aria-labelledby="header-account-menu-link">
+            <a class="dropdown-item" href="/account">Cài đặt tài khoản</a>
+            <a class="dropdown-item" href="/logout">Đăng xuất</a>
+          </div>
+        </div>
+        <!-- Only in mobile nav -->
+        <a class="nav-item nav-link ml-2 mr-2 d-block d-sm-none" href="/account">Cài đặt tài khoản</a>
+        <a class="nav-item nav-link ml-2 mr-2 d-block d-sm-none" href="/logout">Đăng xuất</a>
+        <% } else { %>
+        <!-- LOGGED-OUT NAVIGATION -->
+        <a class="nav-item nav-link ml-2 ml-md-0 mr-2" href="/faq">FAQ</a>
+        <a class="nav-item nav-link ml-2 ml-md-0 mr-2" href="/login">Đăng nhập</a>
+        <!-- Only in desktop nav -->
+        <div class="form-inline d-none ml-2 d-md-block">
+          <a class="btn btn-outline-info" href="/signup">Đăng ký</a>
+        </div>
+        <!-- Only in mobile nav -->
+        <a class="nav-item nav-link text-info ml-2 d-block d-md-none" href="/signup">Đăng ký</a>
+        <% } %>
+      </div>
+    </header>
+
+    <div class="container-fluid h-75" id="body-section">
+      <% if(me) { %>
+      <div class="row">
+        <!-- phần sidebar bên trái -->
+        <div class="col-2 border pt-3 pb-3 button-container">
+          <a href="/welcome" class="btn btn-block">Dashboard</a>
+          <a href="/board/add" class="btn btn-block btn-info">Thêm Board</a>
+          <hr>
+          <div id="arduino-begin"></div>
+          <hr>
+          <a href="/board/delete" class="btn btn-block btn-danger">Xoá Board</a>
+        </div>
+        <div class="col-10 border pt-3 pb-3">
+          <%- body %>
+        </div>
+      </div>
+      <% } else { %>
+      <div class="row">
+        <div class="col">
+          <%- body %>
+        </div>
+      </div>
+      <% } %>
+
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+      // trả về số lượng, tên Board và tình trạng bật/tắt
+      function getBoardLayout(callback) {
+        $.getJSON("/board", function (result) {
+          for (let i = 0; i < result.length; i++) {
+            let tmpBtn = $("<button></button>");
+            tmpBtn.addClass("btn w35 btn-toggle-board");
+            tmpBtn.attr("id", result[i].id);
+            let tmpA = $("<a></a>").text(result[i].name);
+            tmpA.addClass("btn btn-block btn-light").attr("href", "/board/view?id=" + result[i].id);
+            let tmpDiv = $("<div></div>");
+            tmpDiv.addClass("btn-group btn-block btn-container");
+            // hiển thị trạng thái pin hiện tại
+            if (result[i].status) {
+              tmpBtn.addClass("btn-success");
+              tmpBtn.text("ON");
+            } else {
+              tmpBtn.addClass("btn-danger");
+              tmpBtn.text("OFF");
+            }
+            tmpDiv.append(tmpA, tmpBtn);
+            $("#arduino-begin").append(tmpDiv);
+          };
+          callback(result);
+        });
+      };
+
+
+      getBoardLayout(function (globalBoardData) {
+
+        // kích hoạt on/off adruino bên trái
+        // $("body").on("click", ".btn-toggle-board", function (event) {
+        //   var currentBtn = $(this);
+        //   currentBtn.toggleClass("btn-success");
+        //   currentBtn.toggleClass("btn-danger");
+        //   currentBtn.text(currentBtn[0].textContent === "ON" ? "OFF" : "ON");
+        // });
+      });
+    });
+
+  </script>
+
+  <% /* Load Stripe Checkout */ %>
+  <script src="https://checkout.stripe.com/checkout.js"></script>
+
+  <% /* Delete the global `self` to help avoid client-side bugs.
+    (see https://developer.mozilla.org/en-US/docs/Web/API/Window/self) */ %>
+  <script>delete window.self;</script>
+
+  <% /* Auto-injected «script» tags: */ %>
+  <!--SCRIPTS-->
+  <script src="/dependencies/sails.io.js"></script>
+  <script src="/dependencies/lodash.js"></script>
+  <script src="/dependencies/jquery.min.js"></script>
+  <script src="/dependencies/bowser.js"></script>
+  <script src="/dependencies/vue.js"></script>
+  <script src="/dependencies/bootstrap-4/bootstrap-4.bundle.js"></script>
+  <script src="/dependencies/cloud.js"></script>
+  <script src="/dependencies/jquery.form.min.js"></script>
+  <script src="/dependencies/parasails.js"></script>
+  <script src="/js/cloud.setup.js"></script>
+  <script src="/js/components/ajax-button.component.js"></script>
+  <script src="/js/components/ajax-form.component.js"></script>
+  <script src="/js/components/modal.component.js"></script>
+  <script src="/js/utilities/open-stripe-checkout.js"></script>
+  <script src="/js/pages/498.page.js"></script>
+  <script src="/js/pages/account/account-overview.page.js"></script>
+  <script src="/js/pages/account/edit-password.page.js"></script>
+  <script src="/js/pages/account/edit-profile.page.js"></script>
+  <script src="/js/pages/board/board.page.js"></script>
+  <script src="/js/pages/board/delete-board.page.js"></script>
+  <script src="/js/pages/board/new-board.page.js"></script>
+  <script src="/js/pages/contact.page.js"></script>
+  <script src="/js/pages/dashboard/welcome.page.js"></script>
+  <script src="/js/pages/entrance/confirmed-email.page.js"></script>
+  <script src="/js/pages/entrance/forgot-password.page.js"></script>
+  <script src="/js/pages/entrance/login.page.js"></script>
+  <script src="/js/pages/entrance/new-password.page.js"></script>
+  <script src="/js/pages/entrance/signup.page.js"></script>
+  <script src="/js/pages/faq.page.js"></script>
+  <script src="/js/pages/homepage.page.js"></script>
+  <script src="/js/pages/legal/privacy.page.js"></script>
+  <script src="/js/pages/legal/terms.page.js"></script>
+  <!--SCRIPTS END-->
+</body>
+
+</html>

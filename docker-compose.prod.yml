@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  api:
+    image: power-mgmt-api:1.0.0
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+      args:
+        NODE_ENV: production
+    command: ./start.sh
+    hostname: power-api
+    depends_on:
+      - db
+    env_file:
+      - ./.env
+    ports:
+      - "3000:3000"
+    network:
+      - power-network
+
+  db:
+    image: postgres:9.6.7-alpine
+    container_name: power-db
+    hostname: power-db
+    restart: always
+    env_file:
+      - ./.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - ~/power-docker/volumes/db_data:/var/lib/postgresql/data
+      # - ./postgres-initdb.sh:/docker-entrypoint-initdb.d/initdb.sh
+    network:
+      - power-network
+
+# volumes:
+#   db_data: {}
+
+networks:
+  power-network:

@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  api:
+    image: power-mgmt-api:1.0.0
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+      args:
+        NODE_ENV: ${NODE_ENV}
+    # executed once the container is built
+    command: ./start.sh
+    # command: node tools/run.js # or, `node --inspect=0.0.0.0:9229 tools/run.js`
+    hostname: power-api
+    depends_on:
+      - db
+    env_file:
+      - ./.env
+    ports:
+      - "3000:3000"
+      - "1337:1337"
+      - "127.0.0.1:9229:9229" # V8 inspector for tools/run.js
+      - "127.0.0.1:9230:9230" # V8 inspector for src/server.js
+    links:
+      - db
+    # volumes:
+      # - yarn:/home/node/.cache/yarn
+      # - .:/usr/src/app
+
+  # SQL and document data store
+  db:
+    image: postgres:9.6.7-alpine
+    hostname: db
+    restart: always
+    env_file:
+      - ./.env
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      # - ./postgres-initdb.sh:/docker-entrypoint-initdb.d/initdb.sh
+    ports:
+      - "5432:5432"
+
+volumes:
+  db_data: {}
+  # yarn: {}

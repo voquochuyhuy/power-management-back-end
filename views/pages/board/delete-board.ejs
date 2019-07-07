@@ -1,0 +1,36 @@
+<div id="delete-board" v-cloak>
+  <h4>Xoá thiết bị</h3>
+    <h5 id="list-delete-board">Chọn thiết bị muốn xoá
+  </h4>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+    Xác nhận
+  </button>
+  </form>
+
+  <!-- The Modal -->
+  <div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Xoá Board</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          Bạn có chắc muốn xoá? Thao tác này không thể phục hồi.
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" id="btnDelete" data-dismiss="modal">Có</button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Không</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<%- /* Expose server-rendered data as window.SAILS_LOCALS :: */ exposeLocalsToBrowser() %>
